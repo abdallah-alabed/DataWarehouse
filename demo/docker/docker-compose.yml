@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.0 # You can specify the MySQL version you need
+    image: mysql:8.0
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
@@ -10,16 +10,16 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: userpassword
     ports:
-      - "3307:3306"  # Map MySQL's default port to the host machine's port 3306
+      - "3307:3306"
     volumes:
-      - mysql-data:/var/lib/mysql  # Persist MySQL data in case the container stops or is removed
+      - mysql-data:/var/lib/mysql
     networks:
       - mysql-network
-    restart: always  # Restart the container if it crashes
+    restart: always
 
 volumes:
-  mysql-data:  # Define a volume for data persistence
+  mysql-data:
 
 networks:
-  mysql-network:  # Define a custom network for MySQL container
+  mysql-network:
     driver: bridge

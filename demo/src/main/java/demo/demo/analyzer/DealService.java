@@ -9,15 +9,23 @@ import java.util.Currency;
 @Service
 @Slf4j
 public class DealService {
+    private final DealRepository dealRepository;
+
     @Autowired
-    private DealRepository dealRepository;
+    public DealService(DealRepository dealRepository) {
+        this.dealRepository = dealRepository;
+    }
 
-
-    public Deal addNewDeal(DealDto dealDto) {
+    public void addNewDeal(DealDto dealDto) {
         try {
+            if(dealDto.getId() != null && dealRepository.existsById(dealDto.getId())){
+                throw new IllegalArgumentException("Deal Already Exists, Deal Id: "+ dealDto.getId());
+            }
             currencyChecker(dealDto);
-            return dealRepository.save(Deal.createInstance(dealDto));
+            Deal deal = dealRepository.save(Deal.createInstance(dealDto));
+            log.info("Deal with id: {} , was saved successfully in database",deal.getId());
         }catch (Exception e){
+            log.error("Error Adding New Deal {}",e.getMessage());
             throw e;
         }
     }
@@ -30,6 +38,7 @@ public class DealService {
             log.info("To Currency {}",dealDto.getToCurrency());
             Currency.getInstance(dealDto.getToCurrency());
         }catch (IllegalArgumentException  e){
+            log.error("Currency Used Is Not ISO Standard Currency");
             throw new IllegalArgumentException("Invalid ISO Currency");
         }
     }

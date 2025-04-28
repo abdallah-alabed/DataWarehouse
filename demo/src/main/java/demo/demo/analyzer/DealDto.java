@@ -17,7 +17,7 @@ public class DealDto {
     @NotBlank(message = "To Currency Can't Be Empty")
     @Size(min = 3, max = 3, message = "ISO currency must be 3 characters")
     String toCurrency;
-    @DecimalMin(value = "0.0")
+    @DecimalMin(value = "0.0",message = "Amount must be greater than or equal to 0.0")
     @NotNull
     Double amount;
     Timestamp dealTimestamp;
